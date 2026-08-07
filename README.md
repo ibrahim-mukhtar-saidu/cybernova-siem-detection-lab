@@ -71,6 +71,18 @@ Multiple failed attempts followed by successful authentication
 
 ---
 
+# 🏗️ System Architecture
+
+The CyberNova SIEM Detection Lab follows a Security Operations Center (SOC) workflow:
+
+
+Logs → Parsing → Detection → Alerting → Incident Response → Reporting
+
+
+## Architecture Diagram
+
+![CyberNova SIEM Architecture](docs/architecture.png)
+
 # 📊 SOC Dashboard
 
 The dashboard provides:
@@ -84,14 +96,11 @@ The dashboard provides:
 
 ## Dashboard Preview
 
-![CyberNova SOC Dashboard](screenshots/soc-dashboard.png)
+See the SOC dashboard evidence section below.
 
 ## Detection Alerts
 
-![Detection Alerts](screenshots/detection-alerts.png)
-
-![SOC Dashboard](screenshots/soc-dashboard.png)
-
+See the detection evidence section below.
 
 ---
 
