@@ -186,7 +186,9 @@ cybernova-siem-detection-lab/
 
 # 🎯 SOC Analyst Portfolio Project
 
-This project demonstrates practical cybersecurity skills:
+This project demonstrates practical cybersecurity skills and simulates a real-world Blue Team SOC workflow.
+
+## Skills Demonstrated
 
 ✅ Security monitoring  
 ✅ Authentication log investigation  
@@ -195,6 +197,17 @@ This project demonstrates practical cybersecurity skills:
 ✅ Risk scoring  
 ✅ MITRE ATT&CK mapping  
 ✅ Python security automation  
+✅ SOC alert triage  
+✅ Threat detection rules development  
+
+## Technologies Used
+
+- Python
+- Linux
+- YAML configuration
+- HTML/CSS dashboard
+- MITRE ATT&CK Framework
+- Git & GitHub
 
 Built as part of my cybersecurity learning journey and Blue Team development.
 
