@@ -77,8 +77,13 @@ The dashboard provides:
 - MITRE ATT&CK techniques
 - Incident status
 
+## Dashboard Preview
 
-Screenshot:
+![CyberNova SOC Dashboard](screenshots/soc-dashboard.png)
+
+## Detection Alerts
+
+![Detection Alerts](screenshots/detection-alerts.png)
 
 ![SOC Dashboard](screenshots/soc-dashboard.png)
 
