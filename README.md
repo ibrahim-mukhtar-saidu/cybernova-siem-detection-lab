@@ -170,7 +170,23 @@ cybernova-siem-detection-lab/
 │   └── success_after_failures.yaml
 
 └── siem_lab_v2.py
+
 🧠 Security Skills Demonstrated
+---
+
+# 🎯 SOC Analyst Portfolio Project
+
+This project demonstrates practical cybersecurity skills:
+
+✅ Security monitoring  
+✅ Authentication log investigation  
+✅ Detection engineering  
+✅ Incident management  
+✅ Risk scoring  
+✅ MITRE ATT&CK mapping  
+✅ Python security automation  
+
+Built as part of my cybersecurity learning journey and Blue Team development.
 Python Security Automation
 SIEM Development Concepts
 SOC Monitoring Workflow
