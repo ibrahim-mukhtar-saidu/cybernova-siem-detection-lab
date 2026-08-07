@@ -211,16 +211,18 @@ This project demonstrates practical cybersecurity skills and simulates a real-wo
 
 Built as part of my cybersecurity learning journey and Blue Team development.
 
-🔮 Future Improvements
+---
 
-Planned features:
+# 🔮 Future Improvements
 
-Real-time log monitoring
-Web-based SOC dashboard
-Database integration
-More MITRE ATT&CK detections
-Machine learning anomaly detection
-Email/Telegram alert notifications
+Planned improvements:
+
+- Real-time log monitoring
+- Web-based SOC dashboard
+- Database integration
+- More MITRE ATT&CK detections
+- Machine learning anomaly detection
+- Email/Telegram alert notifications
 
 👨‍💻 Author
 
