@@ -1,0 +1,16 @@
+# CyberNova SIEM Configuration
+
+project:
+  name: CyberNova SIEM Detection Lab
+  version: 2.0
+
+detection:
+  brute_force_threshold: 5
+  successful_login_failure_threshold: 3
+
+risk:
+  levels:
+    LOW: 20
+    MEDIUM: 50
+    HIGH: 80
+    CRITICAL: 100

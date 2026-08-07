@@ -1,0 +1,8 @@
+name: Successful Login After Multiple Failures
+id: RULE-002
+description: Detect a successful login after repeated failed login attempts.
+severity: CRITICAL
+mitre: T1078 - Valid Accounts
+threshold: 3
+failed_event: FAILED_LOGIN
+success_event: SUCCESSFUL_LOGIN

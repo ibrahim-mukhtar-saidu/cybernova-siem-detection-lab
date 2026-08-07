@@ -1,0 +1,7 @@
+name: Brute Force Detection
+id: RULE-001
+description: Detect repeated failed login attempts from a single IP address.
+severity: HIGH
+mitre: T1110 - Brute Force
+threshold: 5
+event_type: FAILED_LOGIN

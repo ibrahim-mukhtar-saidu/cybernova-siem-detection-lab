@@ -1,0 +1,44 @@
+body {
+    font-family: Arial, sans-serif;
+    background: #111;
+    color: white;
+    padding: 30px;
+}
+
+
+h1 {
+    text-align: center;
+}
+
+
+.cards {
+    display: flex;
+    gap: 20px;
+}
+
+
+.card {
+    background: #222;
+    padding: 20px;
+    border-radius: 10px;
+    width: 200px;
+    text-align: center;
+}
+
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+
+th, td {
+    border: 1px solid #555;
+    padding: 12px;
+}
+
+
+th {
+    background: #333;
+}
