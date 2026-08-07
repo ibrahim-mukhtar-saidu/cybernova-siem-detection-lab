@@ -34,6 +34,18 @@ The system processes authentication logs and identifies:
 - Successful logins
 - Suspicious authentication patterns
 
+## 📝 Professional Logging System
+
+The SIEM includes structured security logging:
+
+- INFO events
+- WARNING detections
+- ERROR tracking
+- CRITICAL incidents
+
+Example log:
+
+2026-08-07 19:44:15 | CRITICAL | Created 2 security incidents
 
 ## 🚨 Detection Engine
 
@@ -137,7 +149,7 @@ python3 siem_lab_v2.py
 Example output:
 
 CyberNova SIEM Detection Lab
-Version 2.1
+Version 3.0
 
 Events Analyzed:
 10
