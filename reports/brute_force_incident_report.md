@@ -1,38 +1,103 @@
-# Incident Report: Brute Force Detection
+Now paste this:
+
+# 🚨 Incident Report: Brute Force Detection
 
 ## Alert Name
 
 Multiple Failed Authentication Attempts
 
+---
+
 ## Severity
 
-High
+HIGH
 
-## MITRE ATT&CK
+---
+
+## MITRE ATT&CK Mapping
+
+Technique:
 
 T1110 - Brute Force
 
+Tactic:
+
+Credential Access
+
+---
+
+## Detection Summary
+
+The CyberNova SIEM Detection Lab identified multiple failed authentication attempts originating from the same IP address.
+
+The detection engine analyzed authentication logs and identified a suspicious login pattern consistent with a brute force attack.
+
+---
+
 ## Investigation
 
-The SIEM detected multiple failed login attempts from the same IP address.
+### Observed Activity
 
-The detection engine analyzed authentication logs and identified suspicious login behavior consistent with a brute force attack.
-
-## Evidence
-
-- Multiple failed authentication attempts
+- Multiple failed login attempts
 - Same source IP address
-- Repeated login failures within a short time period
+- Repeated authentication failures
+- Potential credential guessing activity
 
-## Response
+### Evidence
 
-- Block suspicious IP
-- Reset affected credentials
-- Monitor additional activity
-- Review authentication logs for further compromise indicators
+Example:
+
+
+Source IP:
+45.33.32.156
+
+Failed Attempts:
+5+
+
+Authentication Type:
+SSH Login
+
+
+---
+
+## Risk Assessment
+
+Severity: HIGH
+
+Impact:
+
+- Possible account compromise
+- Unauthorized access attempt
+- Credential exposure risk
+
+---
+
+## Response Actions
+
+Recommended SOC response:
+
+- Block suspicious IP address
+- Reset affected user credentials
+- Review authentication logs
+- Monitor additional suspicious activity
+- Enable MFA if available
+
+---
 
 ## Analyst Notes
 
-This incident demonstrates the SOC workflow:
+The incident demonstrates a successful detection of credential attack behavior using SIEM detection rules and authentication log analysis.
 
-Detection → Investigation → Risk Assessment → Response
+---
+
+## Status
+
+Resolved / Monitoring
+
+---
+
+## Analyst
+
+Ibrahim Mukhtar Saidu
+
+Cybersecurity Analyst | Founder of CYBERNOVA AI
