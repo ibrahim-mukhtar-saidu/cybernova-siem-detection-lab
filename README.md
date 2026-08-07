@@ -171,6 +171,28 @@ cybernova-siem-detection-lab/
 
 └── siem_lab_v2.py
 
+# 📸 Detection Evidence
+
+## Brute Force Detection Alert
+
+SIEM detection output showing brute force authentication attack identification.
+
+![Brute Force Detection Evidence](screenshots/brute_force_detection.png)
+
+---
+
+## SOC Dashboard
+
+![SOC Dashboard](screenshots/soc-dashboard.png)
+
+---
+
+## Detection Alerts
+
+![Detection Alerts](screenshots/detection-alerts.png)
+
+---
+
 # 🚨 Incident Response Reports
 
 ## Brute Force Attack Detection
