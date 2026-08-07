@@ -1,5 +1,10 @@
 # 🛡️ CyberNova SIEM Detection Lab
 
+![Python](https://img.shields.io/badge/Python-3.x-blue)
+![Security](https://img.shields.io/badge/Focus-Cybersecurity-red)
+![SOC](https://img.shields.io/badge/Role-SOC%20Analyst-green)
+![License](https://img.shields.io/badge/License-MIT-yellow)
+
 ![CyberNova SIEM](screenshots/soc-dashboard.png)
 
 ## 📌 Project Overview
@@ -184,9 +189,10 @@ Database integration
 More MITRE ATT&CK detections
 Machine learning anomaly detection
 Email/Telegram alert notifications
+
 👨‍💻 Author
 
-Ibrahim mukhtar saidu
+Ibrahim Mukhtar Saidu
 
 Cybersecurity Analyst | Founder of CYBERNOVA AI
 
