@@ -171,7 +171,17 @@ cybernova-siem-detection-lab/
 
 └── siem_lab_v2.py
 
-🧠 Security Skills Demonstrated
+# 🧠 Security Skills Demonstrated
+
+- Python Security Automation
+- SIEM Development Concepts
+- SOC Monitoring Workflow
+- Authentication Log Analysis
+- Threat Detection Engineering
+- Incident Response
+- MITRE ATT&CK Framework
+- Blue Team Operations
+
 ---
 
 # 🎯 SOC Analyst Portfolio Project
@@ -187,14 +197,7 @@ This project demonstrates practical cybersecurity skills:
 ✅ Python security automation  
 
 Built as part of my cybersecurity learning journey and Blue Team development.
-Python Security Automation
-SIEM Development Concepts
-SOC Monitoring Workflow
-Authentication Log Analysis
-Threat Detection Engineering
-Incident Response
-MITRE ATT&CK Framework
-Blue Team Operations
+
 🔮 Future Improvements
 
 Planned features:
