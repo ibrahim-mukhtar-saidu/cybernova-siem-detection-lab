@@ -171,6 +171,37 @@ cybernova-siem-detection-lab/
 
 └── siem_lab_v2.py
 
+# 🚨 Incident Response Reports
+
+## Brute Force Attack Detection
+
+The SIEM detected multiple failed authentication attempts from the same source IP address.
+
+### Incident Details
+
+- Alert: Multiple Failed Authentication Attempts
+- Severity: HIGH
+- MITRE ATT&CK: T1110 - Brute Force
+- Category: Credential Access
+
+### Investigation
+
+The detection engine analyzed authentication logs and identified suspicious authentication behavior.
+
+### Response Actions
+
+- Block malicious IP address
+- Reset compromised credentials
+- Review authentication logs
+- Enable MFA
+- Continue monitoring
+
+Full incident report:
+
+[View Brute Force Incident Report](reports/brute_force_incident_report.md)
+
+---
+
 # 🎯 SOC Analyst Portfolio Project
 
 This project simulates a real-world Blue Team Security Operations Center (SOC) workflow and demonstrates practical cybersecurity skills.
