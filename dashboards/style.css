@@ -1,44 +1,124 @@
 body {
-    font-family: Arial, sans-serif;
-    background: #111;
-    color: white;
-    padding: 30px;
+
+font-family: Arial, sans-serif;
+
+background: #0b0f14;
+
+color: white;
+
+padding: 30px;
+
 }
 
 
 h1 {
-    text-align: center;
+
+text-align:center;
+
+color:#00ff99;
+
 }
+
+
+h2 {
+
+margin-top:40px;
+
+}
+
 
 
 .cards {
-    display: flex;
-    gap: 20px;
+
+display:flex;
+
+gap:20px;
+
+justify-content:center;
+
 }
+
 
 
 .card {
-    background: #222;
-    padding: 20px;
-    border-radius: 10px;
-    width: 200px;
-    text-align: center;
+
+background:#151b22;
+
+border:1px solid #00ff99;
+
+padding:20px;
+
+border-radius:12px;
+
+width:220px;
+
+text-align:center;
+
+box-shadow:0 0 15px #00ff9955;
+
 }
+
+
+.card p {
+
+font-size:30px;
+
+color:#00ff99;
+
+}
+
 
 
 table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 20px;
+
+width:100%;
+
+border-collapse:collapse;
+
+margin-top:20px;
+
+background:#151b22;
+
 }
 
-
-th, td {
-    border: 1px solid #555;
-    padding: 12px;
-}
 
 
 th {
-    background: #333;
+
+background:#00ff99;
+
+color:black;
+
+}
+
+
+
+td,th {
+
+padding:15px;
+
+border:1px solid #333;
+
+text-align:center;
+
+}
+
+
+
+tr:hover {
+
+background:#202830;
+
+}
+
+
+
+footer {
+
+margin-top:40px;
+
+text-align:center;
+
+color:#888;
+
 }

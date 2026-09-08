@@ -1,12 +1,12 @@
 # CyberNova SIEM Configuration
+#
+# Detection thresholds, severity, and MITRE mappings are defined in
+# rules/*.yaml so individual detection rules can be tuned independently.
+# This file contains project metadata and risk-scoring thresholds.
 
 project:
   name: CyberNova SIEM Detection Lab
-  version: 2.0
-
-detection:
-  brute_force_threshold: 5
-  successful_login_failure_threshold: 3
+  version: 2.1
 
 risk:
   levels:

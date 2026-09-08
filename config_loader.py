@@ -1,9 +1,63 @@
+"""YAML configuration and detection-rule loading."""
+
+from __future__ import annotations
+
+from pathlib import Path
+from typing import Any
+
 import yaml
 
+CONFIG_FILE = Path("config/siem_config.yaml")
 
-CONFIG_FILE = "config/siem_config.yaml"
+REQUIRED_RULE_KEYS = {"threshold", "severity", "mitre"}
 
 
-def load_config():
-    with open(CONFIG_FILE, "r") as file:
-        return yaml.safe_load(file)
+class ConfigError(Exception):
+    """Raised when a configuration or rule file is missing or invalid."""
+
+
+def load_yaml(path: str | Path) -> dict[str, Any]:
+    file_path = Path(path)
+
+    if not file_path.exists():
+        raise ConfigError(f"configuration file not found: {file_path}")
+
+    if not file_path.is_file():
+        raise ConfigError(f"expected a file, got: {file_path}")
+
+    try:
+        with file_path.open("r", encoding="utf-8") as handle:
+            data = yaml.safe_load(handle)
+    except yaml.YAMLError as exc:
+        raise ConfigError(f"invalid YAML in {file_path}: {exc}") from exc
+    except UnicodeDecodeError as exc:
+        raise ConfigError(
+            f"configuration file is not valid UTF-8: {file_path}"
+        ) from exc
+    except PermissionError as exc:
+        raise ConfigError(
+            f"permission denied reading configuration file: {file_path}"
+        ) from exc
+
+    if not isinstance(data, dict):
+        raise ConfigError(
+            f"expected a YAML mapping at top level: {file_path}"
+        )
+
+    return data
+
+
+def load_config(path: str | Path = CONFIG_FILE) -> dict[str, Any]:
+    return load_yaml(path)
+
+
+def load_rule(path: str | Path) -> dict[str, Any]:
+    rule = load_yaml(path)
+    missing = REQUIRED_RULE_KEYS - rule.keys()
+
+    if missing:
+        raise ConfigError(
+            f"rule file {path} is missing required keys: {sorted(missing)}"
+        )
+
+    return rule

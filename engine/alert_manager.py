@@ -1,19 +1,19 @@
-from datetime import datetime
+"""Alert normalization and identifier assignment."""
+
+from __future__ import annotations
+
+import uuid
+from datetime import datetime, timezone
+from typing import Any
 
 
-def create_alert(alert):
+def create_alert(alert: dict[str, Any]) -> dict[str, Any]:
     return {
-        "alert_id": f"ALERT-{datetime.now().strftime('%Y%m%d%H%M%S')}",
-        "created": str(datetime.now()),
-        "details": alert
+        "alert_id": f"ALERT-{uuid.uuid4().hex}",
+        "created": datetime.now(timezone.utc).isoformat(),
+        "details": alert,
     }
 
 
-def process_alerts(alerts):
-
-    processed = []
-
-    for alert in alerts:
-        processed.append(create_alert(alert))
-
-    return processed
+def process_alerts(alerts: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    return [create_alert(alert) for alert in alerts]
