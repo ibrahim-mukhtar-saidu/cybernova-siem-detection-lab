@@ -1,7 +1,45 @@
+# Python virtual environments
 venv/
+.venv/
+
+# Python cache and compiled files
 __pycache__/
-*.pyc
+*.py[cod]
+*$py.class
+
+# Test and static-analysis caches
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+.coverage
+htmlcov/
+
+# Runtime logs
+*.log
+
+# Generated incident artifacts
+incidents/*.json
+incidents/.sequence
+
+# Generated report data
 reports/*.json
 reports/*.txt
-incidents/*.json
+
+# Local runtime directories
+database/
+alerts/
+
+# Backup files
+*_backup.*
 screenshots_backup/
+
+# Editor and IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Operating-system files
+.DS_Store
+Thumbs.db

@@ -1,0 +1,49 @@
+digraph CyberNova_SIEM {
+
+rankdir=TB;
+
+node [
+shape=box,
+style=filled,
+fontname="Arial"
+];
+
+
+Logs [label="Authentication Logs"];
+
+Parser [label="Log Parser Engine"];
+
+Detection [label="Detection Engine"];
+
+Alerts [label="Alert Manager"];
+
+Risk [label="Risk Engine"];
+
+Incident [label="Incident Manager"];
+
+Database [label="SQLite Database"];
+
+Dashboard [label="SOC Dashboard"];
+
+Reports [label="Report Generator"];
+
+
+Logs -> Parser;
+
+Parser -> Detection;
+
+Detection -> Alerts;
+
+Detection -> Risk;
+
+Alerts -> Incident;
+
+Risk -> Incident;
+
+Incident -> Database;
+
+Database -> Dashboard;
+
+Database -> Reports;
+
+}

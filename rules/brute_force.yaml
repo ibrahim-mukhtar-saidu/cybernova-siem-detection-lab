@@ -4,4 +4,5 @@ description: Detect repeated failed login attempts from a single IP address.
 severity: HIGH
 mitre: T1110 - Brute Force
 threshold: 5
+window_minutes: 10
 event_type: FAILED_LOGIN
