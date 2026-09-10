@@ -962,6 +962,16 @@ These scenarios would require additional correlation strategies and telemetry.
 
 ---
 
+## Duplicate Event Handling
+
+The detection pipeline does not perform heuristic deduplication of authentication events.
+
+If identical authentication records appear as separate source lines, the parser preserves each source occurrence as a distinct `AuthEvent`, and the detection engine evaluates them as separate attempts. This behavior was confirmed through adversarial testing using both direct detector input and the parser-to-detector pipeline.
+
+This is an ingestion-layer assumption rather than a detector-level correction. Without a stable upstream event identifier, deduplicating based only on fields such as timestamp, username, source IP, or event type could incorrectly suppress legitimate repeated authentication attempts.
+
+Production telemetry with reliable event identifiers or upstream deduplication controls would be required to distinguish replayed/duplicated records from legitimate repeated events.
+
 ## Successful Login After Failures
 
 The second rule detects a successful login following multiple failures from the same source IP.

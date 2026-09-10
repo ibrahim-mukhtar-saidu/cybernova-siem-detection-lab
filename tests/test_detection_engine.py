@@ -177,6 +177,23 @@ def test_detect_bruteforce_boundary_at_exact_window_edge_is_included():
     assert alerts[0]["attempts"] == 5
 
 
+def test_detect_bruteforce_counts_duplicate_events_as_separate_attempts():
+    event = make_event(
+        BASE_TIME,
+        "FAILED_LOGIN",
+        "1.2.3.4",
+        user="alice",
+        line_number=42,
+    )
+
+    events = [event] * BRUTE_FORCE_RULE["threshold"]
+
+    alerts = detect_bruteforce(events, BRUTE_FORCE_RULE)
+
+    assert len(alerts) == 1
+    assert alerts[0]["attempts"] == BRUTE_FORCE_RULE["threshold"]
+
+
 def test_detect_bruteforce_handles_out_of_order_input():
     events = [
         make_event(
