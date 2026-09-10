@@ -135,3 +135,83 @@ def test_generate_report_includes_tool_and_version_fields(tmp_path):
 
     assert report["tool"] == "CyberNova SIEM Detection Lab"
     assert "version" in report
+
+
+def test_generate_report_metrics_empty_inputs(tmp_path):
+    report = generate_report([], [], [], report_dir=tmp_path)
+
+    assert report["metrics"] == {
+        "alerts_by_type": {},
+        "alerts_by_severity": {},
+    }
+
+
+def test_generate_report_metrics_group_alerts_by_type_and_severity(tmp_path):
+    alerts = [
+        {
+            "details": {
+                "type": "BRUTE_FORCE",
+                "severity": "HIGH",
+            }
+        },
+        {
+            "details": {
+                "type": "BRUTE_FORCE",
+                "severity": "HIGH",
+            }
+        },
+        {
+            "details": {
+                "type": "SUCCESS_AFTER_FAILURES",
+                "severity": "CRITICAL",
+            }
+        },
+        {
+            "details": {
+                "type": "DISTRIBUTED_PASSWORD_SPRAY",
+                "severity": "HIGH",
+            }
+        },
+    ]
+
+    report = generate_report(
+        [],
+        alerts,
+        [],
+        report_dir=tmp_path,
+    )
+
+    assert report["metrics"] == {
+        "alerts_by_type": {
+            "BRUTE_FORCE": 2,
+            "DISTRIBUTED_PASSWORD_SPRAY": 1,
+            "SUCCESS_AFTER_FAILURES": 1,
+        },
+        "alerts_by_severity": {
+            "CRITICAL": 1,
+            "HIGH": 3,
+        },
+    }
+
+
+def test_generate_report_metrics_handle_missing_alert_details(tmp_path):
+    alerts = [
+        {},
+        {"details": {}},
+    ]
+
+    report = generate_report(
+        [],
+        alerts,
+        [],
+        report_dir=tmp_path,
+    )
+
+    assert report["metrics"] == {
+        "alerts_by_type": {
+            "UNKNOWN": 2,
+        },
+        "alerts_by_severity": {
+            "UNKNOWN": 2,
+        },
+    }

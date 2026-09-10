@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import json
+from collections import Counter
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
@@ -13,6 +14,26 @@ DEFAULT_REPORT_DIR = Path("reports")
 REPORT_FILENAME = "final_siem_report.json"
 
 
+def _build_metrics(alerts: list[dict[str, Any]]) -> dict[str, dict[str, int]]:
+    """Aggregate generated alerts by detection type and severity."""
+    alerts_by_type: Counter[str] = Counter()
+    alerts_by_severity: Counter[str] = Counter()
+
+    for alert in alerts:
+        details = alert.get("details", {})
+
+        alert_type = details.get("type", "UNKNOWN")
+        severity = details.get("severity", "UNKNOWN")
+
+        alerts_by_type[alert_type] += 1
+        alerts_by_severity[severity] += 1
+
+    return {
+        "alerts_by_type": dict(sorted(alerts_by_type.items())),
+        "alerts_by_severity": dict(sorted(alerts_by_severity.items())),
+    }
+
+
 def generate_report(
     events: list[Any],
     alerts: list[dict[str, Any]],
@@ -21,6 +42,7 @@ def generate_report(
     report_dir: str | Path = DEFAULT_REPORT_DIR,
 ) -> dict[str, Any]:
     risk = calculate_risk(alerts, risk_levels)
+    metrics = _build_metrics(alerts)
 
     report = {
         "tool": "CyberNova SIEM Detection Lab",
@@ -31,6 +53,7 @@ def generate_report(
             "alerts_generated": len(alerts),
             "incidents_created": len(incidents),
         },
+        "metrics": metrics,
         "risk_assessment": risk,
         "alerts": alerts,
         "incidents": incidents,
