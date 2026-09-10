@@ -19,6 +19,14 @@ def write_report(path, **overrides):
             "risk_score": 180,
             "risk_level": "CRITICAL",
         },
+        "metrics": {
+            "alerts_by_type": {
+                "BRUTE_FORCE": 1,
+            },
+            "alerts_by_severity": {
+                "HIGH": 1,
+            },
+        },
         "alerts": [
             {
                 "details": {
@@ -95,6 +103,70 @@ def test_generate_dashboard_creates_output_file(tmp_path):
     assert "45.33.32.156" in html_content
     assert "CRITICAL" in html_content
     assert "INC-001" in html_content
+
+
+def test_generate_dashboard_renders_alert_metrics(tmp_path):
+    report_file = tmp_path / "final_siem_report.json"
+
+    write_report(
+        report_file,
+        metrics={
+            "alerts_by_type": {
+                "BRUTE_FORCE": 3,
+                "DISTRIBUTED_PASSWORD_SPRAY": 2,
+            },
+            "alerts_by_severity": {
+                "CRITICAL": 1,
+                "HIGH": 4,
+            },
+        },
+    )
+
+    output = tmp_path / "index.html"
+
+    generate_dashboard(report_file, output)
+
+    html_content = output.read_text(encoding="utf-8")
+
+    assert "Alert Distribution by Detection Type" in html_content
+    assert "DISTRIBUTED_PASSWORD_SPRAY" in html_content
+    assert ">2<" in html_content
+
+    assert "Alert Distribution by Severity" in html_content
+    assert "CRITICAL" in html_content
+    assert ">4<" in html_content
+
+
+def test_generate_dashboard_renders_alert_metrics(tmp_path):
+    report_file = tmp_path / "final_siem_report.json"
+
+    write_report(
+        report_file,
+        metrics={
+            "alerts_by_type": {
+                "BRUTE_FORCE": 3,
+                "DISTRIBUTED_PASSWORD_SPRAY": 2,
+            },
+            "alerts_by_severity": {
+                "CRITICAL": 1,
+                "HIGH": 4,
+            },
+        },
+    )
+
+    output = tmp_path / "index.html"
+
+    generate_dashboard(report_file, output)
+
+    html_content = output.read_text(encoding="utf-8")
+
+    assert "Alert Distribution by Detection Type" in html_content
+    assert "DISTRIBUTED_PASSWORD_SPRAY" in html_content
+    assert "<td>2</td>" in html_content
+
+    assert "Alert Distribution by Severity" in html_content
+    assert "CRITICAL" in html_content
+    assert "<td>4</td>" in html_content
 
 
 def test_generate_dashboard_escapes_html_injection_in_ip_field(
@@ -251,4 +323,6 @@ def test_generate_dashboard_handles_many_alerts(
         encoding="utf-8"
     )
 
-    assert html_content.count("<tr>") == 2 + 200
+    assert html_content.count("<tr>") == 206
+    assert html_content.count("<td>BRUTE_FORCE</td>") == 201
+    assert "<td>HIGH</td>" in html_content

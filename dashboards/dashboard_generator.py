@@ -65,6 +65,16 @@ def _render_incident_rows(incidents: list[dict[str, Any]]) -> str:
     return "\n".join(rows)
 
 
+def _render_metric_rows(metrics: dict[str, int]) -> str:
+    return "\n".join(
+        "<tr>"
+        f"<td>{_escape(name)}</td>"
+        f"<td>{_escape(count)}</td>"
+        "</tr>"
+        for name, count in metrics.items()
+    )
+
+
 def generate_dashboard(
     report_file: str | Path = REPORT_FILE,
     output_file: str | Path = OUTPUT_FILE,
@@ -72,7 +82,11 @@ def generate_dashboard(
     report = _load_report(Path(report_file))
 
     summary = report.get("summary", {})
+    metrics = report.get("metrics", {})
     risk = report.get("risk_assessment", {})
+
+    alerts_by_type = metrics.get("alerts_by_type", {})
+    alerts_by_severity = metrics.get("alerts_by_severity", {})
 
     threats = _render_findings_rows(report.get("alerts", []))
     incident_rows = _render_incident_rows(report.get("incidents", []))
@@ -110,6 +124,18 @@ def generate_dashboard(
 <table>
 <tr><th>Threat</th><th>Severity</th><th>Source IP</th><th>MITRE ATT&amp;CK</th></tr>
 {threats}
+</table>
+
+<h2>Alert Distribution by Detection Type</h2>
+<table>
+<tr><th>Detection Type</th><th>Count</th></tr>
+{_render_metric_rows(alerts_by_type)}
+</table>
+
+<h2>Alert Distribution by Severity</h2>
+<table>
+<tr><th>Severity</th><th>Count</th></tr>
+{_render_metric_rows(alerts_by_severity)}
 </table>
 
 <h2>Incidents</h2>
