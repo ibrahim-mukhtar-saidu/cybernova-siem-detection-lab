@@ -4,7 +4,7 @@ A Python-based Security Operations Center (SOC) detection laboratory for analyzi
 
 ![Python](https://img.shields.io/badge/Python-3.13-blue)
 ![Focus](https://img.shields.io/badge/Focus-SOC%20%7C%20Blue%20Team-red)
-![Testing](https://img.shields.io/badge/Tests-119%20passed-brightgreen)
+![Testing](https://img.shields.io/badge/Tests-135%20passed-brightgreen)
 ![Coverage](https://img.shields.io/badge/Coverage-98%25-brightgreen)
 ![Security](https://img.shields.io/badge/Bandit-0%20issues-brightgreen)
 ![Typing](https://img.shields.io/badge/MyPy-checked-blue)
@@ -657,7 +657,7 @@ python -m pytest -q
 Current result:
 
 ```text
-119 passed
+135 passed
 ```
 
 ---
@@ -713,7 +713,7 @@ python -m pytest -q
 Result:
 
 ```text
-119 passed
+135 passed
 ```
 
 ---
@@ -1126,7 +1126,7 @@ The repository's current architecture and documentation are aligned around the v
 Current verification status:
 
 ```text
-Tests:              119 passed
+Tests:              135 passed
 Coverage:           98%
 Ruff:               PASS
 Bandit:             0 issues
