@@ -60,4 +60,34 @@ def load_rule(path: str | Path) -> dict[str, Any]:
             f"rule file {path} is missing required keys: {sorted(missing)}"
         )
 
+    threshold = rule["threshold"]
+    if isinstance(threshold, bool) or not isinstance(threshold, int) or threshold <= 0:
+        raise ConfigError(
+            f"rule file {path} has invalid threshold: expected a positive integer"
+        )
+
+    severity = rule["severity"]
+    if not isinstance(severity, str) or not severity.strip():
+        raise ConfigError(
+            f"rule file {path} has invalid severity: expected a non-empty string"
+        )
+
+    mitre = rule["mitre"]
+    if not isinstance(mitre, str) or not mitre.strip():
+        raise ConfigError(
+            f"rule file {path} has invalid mitre: expected a non-empty string"
+        )
+
+    if "window_minutes" in rule:
+        window_minutes = rule["window_minutes"]
+        if (
+            isinstance(window_minutes, bool)
+            or not isinstance(window_minutes, int)
+            or window_minutes <= 0
+        ):
+            raise ConfigError(
+                f"rule file {path} has invalid window_minutes: "
+                "expected a positive integer"
+            )
+
     return rule

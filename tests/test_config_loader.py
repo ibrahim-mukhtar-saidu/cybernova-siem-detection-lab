@@ -118,3 +118,61 @@ def test_load_rule_allows_extra_keys(tmp_path):
 def test_load_rule_missing_file_raises_config_error(tmp_path):
     with pytest.raises(ConfigError, match="not found"):
         load_rule(tmp_path / "missing_rule.yaml")
+
+
+def test_load_rule_rejects_non_integer_threshold(tmp_path):
+    rule_file = tmp_path / "rule.yaml"
+    rule_file.write_text(
+        "threshold: five\nseverity: HIGH\nmitre: T1110\n",
+        encoding="utf-8",
+    )
+
+    with pytest.raises(ConfigError, match="invalid threshold"):
+        load_rule(rule_file)
+
+
+def test_load_rule_rejects_non_positive_threshold(tmp_path):
+    for value in ("0", "-1"):
+        rule_file = tmp_path / f"rule_{value.replace('-', 'negative_')}.yaml"
+        rule_file.write_text(
+            f"threshold: {value}\nseverity: HIGH\nmitre: T1110\n",
+            encoding="utf-8",
+        )
+
+        with pytest.raises(ConfigError, match="invalid threshold"):
+            load_rule(rule_file)
+
+
+def test_load_rule_rejects_invalid_window_minutes(tmp_path):
+    for value in ("ten", "0", "-10"):
+        rule_file = tmp_path / f"rule_{value.replace('-', 'negative_')}.yaml"
+        rule_file.write_text(
+            f"threshold: 5\nseverity: HIGH\nmitre: T1110\n"
+            f"window_minutes: {value}\n",
+            encoding="utf-8",
+        )
+
+        with pytest.raises(ConfigError, match="invalid window_minutes"):
+            load_rule(rule_file)
+
+
+def test_load_rule_rejects_empty_severity(tmp_path):
+    rule_file = tmp_path / "rule.yaml"
+    rule_file.write_text(
+        "threshold: 5\nseverity: ''\nmitre: T1110\n",
+        encoding="utf-8",
+    )
+
+    with pytest.raises(ConfigError, match="invalid severity"):
+        load_rule(rule_file)
+
+
+def test_load_rule_rejects_empty_mitre(tmp_path):
+    rule_file = tmp_path / "rule.yaml"
+    rule_file.write_text(
+        "threshold: 5\nseverity: HIGH\nmitre: ''\n",
+        encoding="utf-8",
+    )
+
+    with pytest.raises(ConfigError, match="invalid mitre"):
+        load_rule(rule_file)
