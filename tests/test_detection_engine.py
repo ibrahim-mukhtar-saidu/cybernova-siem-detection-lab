@@ -7,6 +7,7 @@ from config_loader import ConfigError
 from engine import detection_engine
 from engine.detection_engine import (
     detect_bruteforce,
+    detect_distributed_password_spraying,
     detect_success_after_failures,
 )
 from engine.log_parser import AuthEvent
@@ -33,6 +34,13 @@ SUCCESS_RULE = {
     "window_minutes": 10,
     "severity": "CRITICAL",
     "mitre": "T1078 - Valid Accounts",
+}
+
+DISTRIBUTED_SPRAY_RULE = {
+    "threshold": 5,
+    "window_minutes": 10,
+    "severity": "HIGH",
+    "mitre": "T1110 - Brute Force",
 }
 
 
@@ -410,9 +418,142 @@ def test_success_after_failures_respects_time_window():
     assert detect_success_after_failures(events, SUCCESS_RULE) == []
 
 
+def test_distributed_password_spraying_detects_same_user_across_ips():
+    events = [
+        make_event(
+            BASE_TIME + timedelta(seconds=i),
+            "FAILED_LOGIN",
+            f"10.0.0.{i + 1}",
+            user="alice",
+        )
+        for i in range(5)
+    ]
+
+    alerts = detect_distributed_password_spraying(
+        events,
+        DISTRIBUTED_SPRAY_RULE,
+    )
+
+    assert len(alerts) == 1
+    assert alerts[0]["type"] == "DISTRIBUTED_PASSWORD_SPRAY"
+    assert alerts[0]["user"] == "alice"
+    assert alerts[0]["attempts"] == 5
+    assert alerts[0]["source_ips"] == 5
+    assert alerts[0]["severity"] == "HIGH"
+    assert alerts[0]["mitre"] == "T1110 - Brute Force"
+
+
+def test_distributed_password_spraying_requires_multiple_source_ips():
+    events = [
+        make_event(
+            BASE_TIME + timedelta(seconds=i),
+            "FAILED_LOGIN",
+            "10.0.0.1",
+            user="alice",
+        )
+        for i in range(5)
+    ]
+
+    assert (
+        detect_distributed_password_spraying(
+            events,
+            DISTRIBUTED_SPRAY_RULE,
+        )
+        == []
+    )
+
+
+def test_distributed_password_spraying_requires_same_target_user():
+    events = [
+        make_event(
+            BASE_TIME + timedelta(seconds=i),
+            "FAILED_LOGIN",
+            f"10.0.0.{i + 1}",
+            user=f"user{i + 1}",
+        )
+        for i in range(5)
+    ]
+
+    assert (
+        detect_distributed_password_spraying(
+            events,
+            DISTRIBUTED_SPRAY_RULE,
+        )
+        == []
+    )
+
+
+def test_distributed_password_spraying_respects_time_window():
+    window = timedelta(minutes=DISTRIBUTED_SPRAY_RULE["window_minutes"])
+
+    events = [
+        make_event(
+            BASE_TIME,
+            "FAILED_LOGIN",
+            "10.0.0.1",
+            user="alice",
+        ),
+        make_event(
+            BASE_TIME + window + timedelta(seconds=1),
+            "FAILED_LOGIN",
+            "10.0.0.2",
+            user="alice",
+        ),
+        make_event(
+            BASE_TIME + window + timedelta(seconds=2),
+            "FAILED_LOGIN",
+            "10.0.0.3",
+            user="alice",
+        ),
+        make_event(
+            BASE_TIME + window + timedelta(seconds=3),
+            "FAILED_LOGIN",
+            "10.0.0.4",
+            user="alice",
+        ),
+        make_event(
+            BASE_TIME + window + timedelta(seconds=4),
+            "FAILED_LOGIN",
+            "10.0.0.5",
+            user="alice",
+        ),
+    ]
+
+    assert (
+        detect_distributed_password_spraying(
+            events,
+            DISTRIBUTED_SPRAY_RULE,
+        )
+        == []
+    )
+
+
+def test_distributed_password_spraying_alerts_users_independently():
+    events = []
+
+    for user in ("alice", "bob"):
+        events.extend(
+            make_event(
+                BASE_TIME + timedelta(seconds=i),
+                "FAILED_LOGIN",
+                f"10.0.{1 if user == 'alice' else 2}.{i + 1}",
+                user=user,
+            )
+            for i in range(5)
+        )
+
+    alerts = detect_distributed_password_spraying(
+        events,
+        DISTRIBUTED_SPRAY_RULE,
+    )
+
+    assert {alert["user"] for alert in alerts} == {"alice", "bob"}
+
+
 def test_run_detection_combines_both_rules(tmp_path, monkeypatch):
     brute_force_rule_file = tmp_path / "brute_force.yaml"
     success_rule_file = tmp_path / "success.yaml"
+    distributed_spray_rule_file = tmp_path / "distributed_spray.yaml"
 
     brute_force_rule_file.write_text(
         """threshold: 2
@@ -432,6 +573,15 @@ window_minutes: 10
         encoding="utf-8",
     )
 
+    distributed_spray_rule_file.write_text(
+        """threshold: 5
+severity: HIGH
+mitre: T1110 - Brute Force
+window_minutes: 10
+""",
+        encoding="utf-8",
+    )
+
     monkeypatch.setattr(
         detection_engine,
         "BRUTE_FORCE_RULE_FILE",
@@ -442,6 +592,12 @@ window_minutes: 10
         detection_engine,
         "SUCCESS_AFTER_FAILURES_RULE_FILE",
         str(success_rule_file),
+    )
+
+    monkeypatch.setattr(
+        detection_engine,
+        "DISTRIBUTED_PASSWORD_SPRAY_RULE_FILE",
+        str(distributed_spray_rule_file),
     )
 
     events = [
@@ -468,6 +624,54 @@ window_minutes: 10
         "BRUTE_FORCE",
         "SUCCESS_AFTER_FAILURES",
     }
+
+
+def test_run_detection_detects_distributed_password_spray(tmp_path, monkeypatch):
+    distributed_spray_rule_file = tmp_path / "distributed_spray.yaml"
+
+    distributed_spray_rule_file.write_text(
+        """threshold: 5
+severity: HIGH
+mitre: T1110 - Brute Force
+window_minutes: 10
+""",
+        encoding="utf-8",
+    )
+
+    monkeypatch.setattr(
+        detection_engine,
+        "DISTRIBUTED_PASSWORD_SPRAY_RULE_FILE",
+        str(distributed_spray_rule_file),
+    )
+
+    events = [
+        make_event(
+            BASE_TIME + timedelta(seconds=i),
+            "FAILED_LOGIN",
+            f"10.10.0.{i + 1}",
+            user="alice",
+        )
+        for i in range(5)
+    ]
+
+    alerts = detection_engine.run_detection(events)
+
+    spray_alerts = [
+        alert
+        for alert in alerts
+        if alert["type"] == "DISTRIBUTED_PASSWORD_SPRAY"
+    ]
+
+    assert spray_alerts == [
+        {
+            "type": "DISTRIBUTED_PASSWORD_SPRAY",
+            "user": "alice",
+            "attempts": 5,
+            "source_ips": 5,
+            "severity": "HIGH",
+            "mitre": "T1110 - Brute Force",
+        }
+    ]
 
 
 def test_run_detection_raises_config_error_when_rule_missing(

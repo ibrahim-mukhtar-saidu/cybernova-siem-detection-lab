@@ -19,6 +19,13 @@ mitre: T1078 - Valid Accounts
 window_minutes: 10
 """
 
+RULE_DISTRIBUTED_SPRAY = """\
+threshold: 5
+severity: HIGH
+mitre: T1110 - Brute Force
+window_minutes: 10
+"""
+
 CONFIG = """\
 project:
   name: Test SIEM
@@ -40,6 +47,10 @@ def _write_workspace(base: Path, log_content: str = "") -> None:
     )
     (base / "rules" / "success_after_failures.yaml").write_text(
         RULE_SUCCESS,
+        encoding="utf-8",
+    )
+    (base / "rules" / "distributed_password_spray.yaml").write_text(
+        RULE_DISTRIBUTED_SPRAY,
         encoding="utf-8",
     )
 
