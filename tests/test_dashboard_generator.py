@@ -130,38 +130,6 @@ def test_generate_dashboard_renders_alert_metrics(tmp_path):
 
     assert "Alert Distribution by Detection Type" in html_content
     assert "DISTRIBUTED_PASSWORD_SPRAY" in html_content
-    assert ">2<" in html_content
-
-    assert "Alert Distribution by Severity" in html_content
-    assert "CRITICAL" in html_content
-    assert ">4<" in html_content
-
-
-def test_generate_dashboard_renders_alert_metrics(tmp_path):
-    report_file = tmp_path / "final_siem_report.json"
-
-    write_report(
-        report_file,
-        metrics={
-            "alerts_by_type": {
-                "BRUTE_FORCE": 3,
-                "DISTRIBUTED_PASSWORD_SPRAY": 2,
-            },
-            "alerts_by_severity": {
-                "CRITICAL": 1,
-                "HIGH": 4,
-            },
-        },
-    )
-
-    output = tmp_path / "index.html"
-
-    generate_dashboard(report_file, output)
-
-    html_content = output.read_text(encoding="utf-8")
-
-    assert "Alert Distribution by Detection Type" in html_content
-    assert "DISTRIBUTED_PASSWORD_SPRAY" in html_content
     assert "<td>2</td>" in html_content
 
     assert "Alert Distribution by Severity" in html_content

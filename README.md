@@ -133,6 +133,44 @@ A successful login following several failed attempts is **not automatically proo
 
 ---
 
+## 3. Distributed Password Spray Detection
+
+Detects repeated failed login attempts against the same user from multiple source IP addresses within the configured detection window.
+
+### Default Rule
+
+| Parameter    | Value               |
+| ------------ | ------------------- |
+| Rule ID      | `RULE-003`          |
+| Threshold    | 5 failed attempts   |
+| Window       | 10 minutes          |
+| Severity     | HIGH                |
+| MITRE ATT&CK | T1110 — Brute Force |
+| Event Type   | `FAILED_LOGIN`      |
+
+Rule definition:
+
+```yaml
+name: Distributed Password Spray Detection
+id: RULE-003
+description: Detect repeated failed login attempts against the same user from multiple source IP addresses.
+severity: HIGH
+mitre: T1110 - Brute Force
+threshold: 5
+window_minutes: 10
+failed_event: FAILED_LOGIN
+```
+
+The rule is stored in:
+
+```text
+rules/distributed_password_spray.yaml
+```
+
+This detection extends authentication coverage for source-IP rotation and distributed password-spraying behavior. It should be correlated with additional authentication and endpoint telemetry during investigation rather than treated as independent proof of compromise.
+
+---
+
 # ⚙️ Configuration
 
 Detection behavior is controlled through YAML configuration files.
@@ -142,6 +180,7 @@ Detection behavior is controlled through YAML configuration files.
 ```text
 rules/
 ├── brute_force.yaml
+├── distributed_password_spray.yaml
 └── success_after_failures.yaml
 ```
 
